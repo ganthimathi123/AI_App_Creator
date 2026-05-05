@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// ─── Authentication ───────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  configs       AppConfig[]
+  dynamicData   DynamicEntity[]
+  notifications Notification[]
+  csvImports    CsvImport[]
+}
+
+// ─── App Configurations ───────────────────────────────────────────
+
+model AppConfig {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  config      String   // STORED AS STRING FOR SQLITE COMPATIBILITY
+  version     Int      @default(1)
+  isActive    Boolean  @default(true)
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dynamicData   DynamicEntity[]
+
+  @@index([userId])
+}
+
+// ─── Dynamic Entity Data ──────────────────────────────────────────
+// Stores all dynamic entity records as JSON String
+
+model DynamicEntity {
+  id         String   @id @default(uuid())
+  entityName String   // e.g. "products", "orders"
+  data       String   // STORED AS STRING FOR SQLITE COMPATIBILITY
+  configId   String
+  userId     String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  config AppConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+  user   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([entityName, configId])
+  @@index([userId])
+}
+
+// ─── Notifications ────────────────────────────────────────────────
+
+model Notification {
+  id        String   @id @default(uuid())
+  type      String   // "info", "success", "warning", "error"
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  userId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+}
+
+// ─── CSV Imports ──────────────────────────────────────────────────
+
+model CsvImport {
+  id         String   @id @default(uuid())
+  fileName   String
+  entityName String
+  configId   String
+  rowCount   Int      @default(0)
+  status     String   @default("pending") // "pending", "processing", "completed", "failed"
+  errors     String?  // STORED AS STRING FOR SQLITE COMPATIBILITY
+  userId     String
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}

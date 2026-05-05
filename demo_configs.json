@@ -1,0 +1,76 @@
+{
+  "E-Commerce Store": {
+    "appName": "LuxeCommerce",
+    "theme": { "primaryColor": "#8b5cf6", "darkMode": true },
+    "entities": [
+      {
+        "name": "Product",
+        "label": "Products",
+        "fields": [
+          { "name": "sku", "label": "SKU", "type": "text", "required": true },
+          { "name": "name", "label": "Product Name", "type": "text", "required": true },
+          { "name": "price", "label": "Price", "type": "number", "required": true },
+          { "name": "category", "label": "Category", "type": "select", "options": ["Electronics", "Fashion", "Home", "Beauty"] },
+          { "name": "inStock", "label": "In Stock", "type": "boolean" }
+        ],
+        "features": { "csvImport": true, "notifications": true }
+      },
+      {
+        "name": "Order",
+        "label": "Orders",
+        "fields": [
+          { "name": "orderId", "label": "Order ID", "type": "text", "required": true },
+          { "name": "customer", "label": "Customer Name", "type": "text" },
+          { "name": "status", "label": "Status", "type": "select", "options": ["Pending", "Shipped", "Delivered", "Cancelled"] },
+          { "name": "total", "label": "Total Amount", "type": "number" }
+        ],
+        "features": { "csvImport": false, "notifications": true }
+      }
+    ]
+  },
+  "SaaS CRM": {
+    "appName": "NexusCRM",
+    "theme": { "primaryColor": "#0ea5e9", "darkMode": false },
+    "entities": [
+      {
+        "name": "Lead",
+        "label": "Leads",
+        "fields": [
+          { "name": "firstName", "label": "First Name", "type": "text", "required": true },
+          { "name": "lastName", "label": "Last Name", "type": "text" },
+          { "name": "email", "label": "Email", "type": "email", "required": true },
+          { "name": "source", "label": "Source", "type": "select", "options": ["LinkedIn", "Referral", "Website", "Ads"] }
+        ],
+        "features": { "csvImport": true, "notifications": false }
+      },
+      {
+        "name": "Task",
+        "label": "Tasks",
+        "fields": [
+          { "name": "title", "label": "Task Title", "type": "text", "required": true },
+          { "name": "dueDate", "label": "Due Date", "type": "date" },
+          { "name": "priority", "label": "Priority", "type": "select", "options": ["Low", "Medium", "High", "Critical"] },
+          { "name": "completed", "label": "Is Completed", "type": "boolean" }
+        ],
+        "features": { "csvImport": false, "notifications": true }
+      }
+    ]
+  },
+  "Fleet Tracker": {
+    "appName": "SwiftFleet",
+    "theme": { "primaryColor": "#f59e0b", "darkMode": false },
+    "entities": [
+      {
+        "name": "Vehicle",
+        "label": "Vehicles",
+        "fields": [
+          { "name": "plate", "label": "License Plate", "type": "text", "required": true },
+          { "name": "make", "label": "Make", "type": "text" },
+          { "name": "model", "label": "Model", "type": "text" },
+          { "name": "lastService", "label": "Last Service Date", "type": "date" }
+        ],
+        "features": { "csvImport": true, "notifications": true }
+      }
+    ]
+  }
+}
